@@ -32,17 +32,18 @@ const getTask = async (req, res) => {
 const updateTask = async (req, res) => {
   try{
     const taskID = req.params.id;
-    const task = await Task.findById(taskID);
+    const task = await Task.findByIdAndUpdate(taskID, req.body, {
+      //return new item
+      new: true, runValidators: true
+    });
     if(!task){
       return res.status(404).json({msg: `No task with id ${taskID}`});
     }
-    task.name = req.body.name;
-    
     res.status(200).json({task});
   } catch(error){
     res.status(500).json({msg : error})
   }
-};
+};  
 
 const deleteTask = async (req, res) => {
   try{
